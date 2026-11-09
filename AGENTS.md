@@ -1,0 +1,48 @@
+# AGENTS.md - contractcraft
+
+Contract templates, workflow, redlines, risk scan, seals and deadlines. Read first:
+`mcp-central-docs/standards/RUST_ARTCRAFT_STANDARD.md`,
+`mcp-central-docs/projects/craft-fleet-expansion/BACKOFFICE_CRAFT_SUITE.md` (section 4.5).
+
+## Layout
+
+- `crates/contractcraft-store` (L1): templates (versioned), contracts, immutable versions and seals, transitions, emitted-event log on SQLite WAL. Status machine and template fill live here.
+- `crates/contractcraft-core` (L1): `Command` bus, `dispatch`, MCP catalog, `risk.rs` (TOML rules, default DE/EN set), `seal.rs` (SHA-256 + Ed25519), `render.rs` (md -> Typst, Typst CLI wrapper), redline (`similar`), deadlines, demo seed.
+- `crates/contractcraft-mcp` (L2): `contractcraft` binary. CLI verbs map onto the same tool calls as MCP.
+- No L3 (egui) yet. Planned: contract list, side-by-side redline, risk panel, deadline calendar.
+- Shared kernel: `../craft-biz` (deadline maths, money, bus, MCP loop, confinement).
+
+## Invariants (never weaken)
+
+- Status changes only along `Status::can_move_to`; terminate/cancel need a reason.
+- Text changes only in draft, only as a new version. Versions and seals immutable (triggers).
+- Executed requires a seal of the current version.
+- The seal is tamper evidence. Never call it a signature with legal effect in code, docs or tool descriptions.
+- Never produce a PDF without a real renderer (no placeholder bytes).
+- Risk scan output always carries the "not legal advice" disclaimer.
+- Events (`contract.deadline` -> taskcraft, `contract.executed` -> gaincraft) are sent once, recorded in `emitted`.
+- The seal key never appears in output or logs.
+
+## Rules
+
+- Zero-panic: unwrap/expect/panic/todo/unimplemented denied outside tests.
+- MCP mode: stdout is JSON-RPC only; diagnostics to stderr.
+- File tools (body_path, rules_path, render, verify file) go through `Confinement::check`.
+- Demo data only via `demo-seed`, only on an empty database, labelled DEMO. Mock names only.
+- Every bug fix ships with a regression test.
+
+## Repo hygiene
+
+- LF line endings only (`.gitattributes`). CRLF breaks commit hooks.
+- Single trunk `main`. No agent branches or leftover WIP branches.
+- No em dash characters in code, docs or commit messages.
+- No `*.bak`, `*.db`, `*.key`, rendered outputs, `target/`, binaries in git.
+
+## Gates
+
+1. `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+2. `cargo test --workspace`
+3. `cargo fmt --all --check`
+4. MCP probe: `initialize` -> `tools/list` -> `tools/call`, stdout pure JSON
+5. `Cargo.lock` committed, clean `git status`
+6. `CHANGELOG.md` line

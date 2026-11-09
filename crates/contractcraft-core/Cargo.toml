@@ -1,0 +1,23 @@
+[package]
+name = "contractcraft-core"
+description = "contractcraft L1: command bus, template fill, risk rules, redline, Ed25519 seal, typst render wrapper, deadlines with bus events, demo seed."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+contractcraft-store = { path = "../contractcraft-store" }
+craft-biz.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+sha2.workspace = true
+ed25519-dalek.workspace = true
+getrandom.workspace = true
+similar.workspace = true
+regex.workspace = true
+toml.workspace = true
+
+[lints]
+workspace = true
