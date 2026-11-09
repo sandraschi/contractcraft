@@ -2,7 +2,12 @@
 
 Contract templates, review workflow, redlines, a clause risk scan, tamper-evident seals and notice deadlines for a small Austrian business. One SQLite file, one binary that is both CLI and MCP server. Part of the back-office craft suite (replaces Word templates in a folder, ad-hoc review mails and the "when can we cancel this?" spreadsheet).
 
-Status: **v0.1.0, Tier 1** (store + CLI + MCP, tested). No desktop window yet. Synthetic demo data only. **Not legal advice**: the risk scan points a human reviewer at clauses, nothing more.
+Status: **v0.1.1, Tier 1** (store + CLI + MCP, tested). No desktop window yet. Synthetic demo data only. **Not legal advice**: the risk scan points a human reviewer at clauses, nothing more.
+
+- How to use it day to day: [HELP.md](HELP.md)
+- What it is for and where it stops: [docs/PRD.md](docs/PRD.md)
+- Every MCP tool: [docs/TOOLS.md](docs/TOOLS.md) (generated, checked by a test)
+- Changes: [CHANGELOG.md](CHANGELOG.md)
 
 ## What it does
 
@@ -42,7 +47,7 @@ Database: `--db PATH`, else `$CONTRACTCRAFT_DB`, else `%LOCALAPPDATA%\contractcr
 { "mcpServers": { "contractcraft": { "command": "D:/Dev/cargo-target/release/contractcraft.exe", "args": ["mcp", "--allow-path", "D:/Dev/contracts"] } } }
 ```
 
-17 tools, all `contract_*`. Agent actions are logged with actor `agent`.
+17 tools, all `contract_*`; see [docs/TOOLS.md](docs/TOOLS.md). Agent actions are logged with actor `agent`.
 
 ## Build
 
