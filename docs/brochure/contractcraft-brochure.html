@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ContractCraft v0.1.1 — Technical Brochure &amp; Operator Handbook</title>
+  <meta name="author" content="Sandra Schipal" />
+  <style>
+    @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      color: #0f172a;
+      background: #ffffff;
+      line-height: 1.55;
+      font-size: 10.2pt;
+      margin: 0;
+      padding: 0;
+    }
+    .cover {
+      background: linear-gradient(145deg, #090d16 0%, #0f172a 55%, #0c4a6e 100%);
+      color: #f8fafc;
+      padding: 44px 40px 48px 40px;
+      border-radius: 14px;
+      margin-bottom: 28px;
+      page-break-after: always;
+    }
+    .cover-kicker {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid #38bdf8;
+      color: #7dd3fc;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+    .cover h1 {
+      font-size: 32pt;
+      line-height: 1.1;
+      margin: 0 0 12px 0;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    .cover h2 {
+      font-size: 13.5pt;
+      font-weight: 400;
+      color: #bae6fd;
+      margin: 0 0 26px 0;
+    }
+    .cover-grid {
+      display: table;
+      width: 100%;
+      margin-top: 22px;
+      border-collapse: separate;
+      border-spacing: 10px;
+    }
+    .cover-stat {
+      display: table-cell;
+      width: 25%;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(125, 211, 252, 0.35);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .cover-stat .num {
+      font-size: 18pt;
+      font-weight: 800;
+      color: #38bdf8;
+      display: block;
+    }
+    .cover-stat .lbl {
+      font-size: 8pt;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .cover-footer {
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 9pt;
+      color: #94a3b8;
+    }
+    h2.section-title {
+      font-size: 15pt;
+      color: #0c4a6e;
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 5px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    h3 {
+      font-size: 11.5pt;
+      color: #0f172a;
+      margin-top: 16px;
+      margin-bottom: 6px;
+    }
+    p { margin: 0 0 9px 0; }
+    ul { margin: 6px 0 12px 0; padding-left: 20px; }
+    li { margin-bottom: 4px; }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px 0;
+      font-size: 9pt;
+    }
+    table.data-table th {
+      background: #0f172a;
+      color: #f8fafc;
+      text-align: left;
+      padding: 6px 8px;
+      font-weight: 700;
+    }
+    table.data-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    table.data-table tr:nth-child(even) td { background: #f8fafc; }
+    code, pre {
+      font-family: "Cascadia Code", "Consolas", "Courier New", monospace;
+      font-size: 8.8pt;
+    }
+    code {
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 11px 14px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      line-height: 1.45;
+    }
+    .page-break { page-break-before: always; }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <div class="cover-kicker">ArtCraft Fleet Technical Brochure &middot; Series #24</div>
+    <h1>ContractCraft v0.1.1</h1>
+    <h2>Contract templates, review workflow, redlines, a clause risk scan, tamper-evident seals and notice deadlines for a small Austrian business. One SQLite file, one binary that is both CLI and MCP server. Part of the back-office craft suite (replaces Word templates in a folder, ad-hoc review mails and the &quot;when can we cancel this?&quot; spreadsheet).</h2>
+
+    <svg viewBox="0 0 760 165" width="100%" height="165" xmlns="http://www.w3.org/2000/svg" style="margin: 10px 0 16px 0;">
+      <rect x="2" y="2" width="756" height="161" rx="12" fill="#0b1322" stroke="#38bdf8" stroke-width="1.5"/>
+      <rect x="24" y="22" width="200" height="120" rx="8" fill="#1e293b" stroke="#67e8f9" stroke-width="1.5"/>
+      <text x="124" y="52" fill="#67e8f9" font-size="13" font-weight="bold" text-anchor="middle">L3: contractcraft-app</text>
+      <text x="124" y="76" fill="#e2e8f0" font-size="10" text-anchor="middle">Native eframe/egui Studio</text>
+      <text x="124" y="98" fill="#94a3b8" font-size="9.5" text-anchor="middle">In-Process Core Dispatch</text>
+      <text x="124" y="118" fill="#34d399" font-size="9.5" text-anchor="middle">Zero HTTP / Port Overhead</text>
+
+      <rect x="280" y="22" width="200" height="120" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="380" y="52" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">L2: contractcraft-mcp</text>
+      <text x="380" y="76" fill="#e2e8f0" font-size="10" text-anchor="middle">CLI + Stdio MCP 2024-11-05</text>
+      <text x="380" y="98" fill="#94a3b8" font-size="9.5" text-anchor="middle">Human Verbs &amp; Agent Tools</text>
+      <text x="380" y="118" fill="#34d399" font-size="9.5" text-anchor="middle">Deterministic JSON Output</text>
+
+      <rect x="536" y="22" width="200" height="120" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+      <text x="636" y="52" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">L1: contractcraft-core</text>
+      <text x="636" y="76" fill="#e2e8f0" font-size="10" text-anchor="middle">Single dispatch() Engine</text>
+      <text x="636" y="98" fill="#fcd34d" font-size="9.5" text-anchor="middle">deny(unwrap/expect/panic)</text>
+      <text x="636" y="118" fill="#94a3b8" font-size="9.5" text-anchor="middle">Pre-Write Backups &amp; Guards</text>
+
+      <line x1="224" y1="82" x2="280" y2="82" stroke="#38bdf8" stroke-width="2"/>
+      <line x1="480" y1="82" x2="536" y2="82" stroke="#10b981" stroke-width="2"/>
+    </svg>
+
+    <div class="cover-grid">
+      <div class="cover-stat">
+        <span class="num">v0.1.1</span>
+        <span class="lbl">Release Version</span>
+      </div>
+      <div class="cover-stat">
+        <span class="num">3 Crates</span>
+        <span class="lbl">Workspace Tiers</span>
+      </div>
+      <div class="cover-stat">
+        <span class="num">4003</span>
+        <span class="lbl">Pure-Rust LOC</span>
+      </div>
+      <div class="cover-stat">
+        <span class="num">6-Gate</span>
+        <span class="lbl">ArtCraft Verified</span>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <strong>Repository:</strong> <code>D:\Dev\repos\contractcraft</code> &middot;
+      <strong>Standard:</strong> <code>CRAFT_BROCHURE_STANDARD.md</code> &middot;
+      <strong>Compiled via:</strong> <code>BookCraft v0.5.0</code>
+    </div>
+  </div>
+
+  <p>Contract templates, review workflow, redlines, a clause risk scan, tamper-evident seals and notice deadlines for a small Austrian business. One SQLite file, one binary that is both CLI and MCP server. Part of the back-office craft suite (replaces Word templates in a folder, ad-hoc review mails and the &quot;when can we cancel this?&quot; spreadsheet).</p>
+<p>Status: <strong>v0.1.1, Tier 1</strong> (store + CLI + MCP, tested). No desktop window yet. Synthetic demo data only. <strong>Not legal advice</strong>: the risk scan points a human reviewer at clauses, nothing more.</p>
+<ul>
+<li>How to use it day to day: HELP.md</li>
+<li>What it is for and where it stops: docs/PRD.md</li>
+<li>Every MCP tool: docs/TOOLS.md (generated, checked by a test)</li>
+<li>Changes: CHANGELOG.md</li>
+</ul>
+<h2 class="section-title">What it does</h2>
+<ul>
+<li><strong>Templates</strong> with declared variables (<code>{{kunde}}</code>, required/default). Placeholders and declarations must match; filling refuses typos, missing required values and leftover placeholders. Template edits create versions; contracts remember which version they came from.</li>
+<li><strong>Status machine:</strong> draft -&gt; under_review -&gt; pending_signature -&gt; executed -&gt; terminated / expired (cancelled from any open state). Everything else is refused; every move is logged with actor and note.</li>
+<li><strong>Versions:</strong> text changes only in draft and only as a new version. Versions and seals are immutable (SQLite triggers).</li>
+<li><strong>Redline:</strong> line diff between versions plus the risk delta (&quot;this edit adds unlimited liability&quot;).</li>
+<li><strong>Risk scan:</strong> deterministic DE + EN rules in TOML: unlimited liability, Schad- und Klagloshaltung / indemnity, automatic renewal, venue or governing law outside Austria, personal data without AVV / DPA, penalties, unilateral changes, exclusivity. Bring your own rule file with <code>--rules</code>.</li>
+<li><strong>Seal:</strong> SHA-256 of the exact text plus an Ed25519 signature over (number, version, hash, time). Executing a contract requires a seal of the current version. <code>verify</code> checks the stored text and, with <code>--file</code>, that an exported copy is byte-identical. This is tamper evidence, <strong>not</strong> a legally binding e-signature (no QES / ID Austria).</li>
+<li><strong>Render:</strong> <code>md</code> (byte-identical to the sealed text), <code>typ</code> (Typst source), <code>pdf</code> via the Typst CLI. Without Typst the PDF verb fails with an install hint; no fake PDF.</li>
+<li><strong>Deadlines:</strong> last notice day of auto-renewing contracts (month-end rule from craft-biz) or the end of a fixed term. <code>--emit</code> sends each deadline once to taskcraft (<code>contract.deadline</code> becomes an issue with a due date). Executing sends <code>contract.executed</code> to gaincraft.</li>
+</ul>
+<h2 class="section-title">Quick start</h2>
+<pre>
+contractcraft demo-seed
+contractcraft list
+contractcraft show C-2026-001
+contractcraft scan C-2026-002
+contractcraft redline C-2026-003
+contractcraft deadlines --days 60 --emit     # taskcraft inbox-drain picks them up
+contractcraft draft &quot;Wartung Kanzlei&quot; &quot;Mock &amp; Partner OG&quot; --template &quot;Wartungsvertrag (DEMO)&quot; --set kunde=&quot;Mock &amp; Partner OG&quot; --set leistung=&quot;Wartung&quot; --set entgelt=&quot;300,00 EUR&quot; --set beginn=01.01.2027
+contractcraft terms C-2026-004 --start 01.01.2027 --months 12 --renew 12 --notice 3 --value &quot;3.600,00&quot;
+contractcraft move C-2026-004 under_review
+contractcraft seal C-2026-004
+contractcraft render C-2026-001 D:\Temp\c1.md
+contractcraft verify C-2026-001 --file D:\Temp\c1.md
+</pre>
+<p>Template variables on the CLI: <code>--var kunde!</code> (required), <code>--var ort=Wien</code> (default), <code>--var notiz</code> (optional).</p>
+<p>Database: <code>--db PATH</code>, else <code>$CONTRACTCRAFT_DB</code>, else <code>%LOCALAPPDATA%\contractcraft\contractcraft.db</code>. Seal key: <code>--key</code>, else <code>seal.key</code> next to the database (created on first seal; keep it out of shared backups). Typst: <code>typst</code> on PATH or <code>CONTRACTCRAFT_TYPST</code>.</p>
+<h2 class="section-title">MCP</h2>
+<pre>
+{ &quot;mcpServers&quot;: { &quot;contractcraft&quot;: { &quot;command&quot;: &quot;D:/Dev/cargo-target/release/contractcraft.exe&quot;, &quot;args&quot;: [&quot;mcp&quot;, &quot;--allow-path&quot;, &quot;D:/Dev/contracts&quot;] } } }
+</pre>
+<p>17 tools, all <code>contract_*</code>; see docs/TOOLS.md. Agent actions are logged with actor <code>agent</code>.</p>
+<h2 class="section-title">Build</h2>
+<pre>
+just ci
+just build-release
+</pre>
+<p>Needs <code>../craft-biz</code> checked out next to this repo.</p>
+<h2 class="section-title">Not done (honest list)</h2>
+<ul>
+<li>No egui desktop app.</li>
+<li>PDF only through the Typst CLI (not installed on Goliath yet). The md -&gt; Typst converter knows headings, bullets and paragraphs; no tables or bold.</li>
+<li>No LLM review (planned via craft-ai-core, always labelled advisory).</li>
+<li>Seal key is a plain file, not Windows Credential Manager yet.</li>
+<li>No QES / ID Austria / A-Trust signatures; parties still sign outside the app.</li>
+<li>No word-level redline (line level only); no DOCX import.</li>
+</ul>
+
+  <div class="page-break"></div><h2 class="section-title">Product Requirements &amp; Architecture Specification</h2><h2 class="section-title">What it is</h2>
+<p>Contract templates, a review workflow, redlines, a deterministic clause risk scan, tamper-evident seals and notice deadlines for a small Austrian business. Pure Rust, ArtCraft pattern. Suite plan: <code>BACKOFFICE_CRAFT_SUITE.md</code>, section 4.5.</p>
+<h2 class="section-title">Users</h2>
+<ul>
+<li>The owner who writes, reviews and keeps contracts and must not miss a notice deadline.</li>
+<li>Agents over MCP: draft from templates, scan risk, compare versions, watch deadlines. Agent actions are logged with actor <code>agent</code>.</li>
+</ul>
+<h2 class="section-title">Jobs</h2>
+<p>1. Produce contracts from vetted templates without placeholder mistakes.</p>
+<p>2. See risky clauses and what an edit changed.</p>
+<p>3. Prove later that a copy is exactly what was agreed.</p>
+<p>4. Never miss a K&#252;ndigungsfrist.</p>
+<h2 class="section-title">Today (v0.1.0)</h2>
+<ul>
+<li>Versioned templates with strict variables; drafts from templates or own text.</li>
+<li>Enforced status machine; text changes only in draft as new versions; versions and seals immutable by trigger; executing needs a seal.</li>
+<li>Risk scan: 9 default DE/EN rules, user TOML rules, disclaimer on every result; redline with risk delta.</li>
+<li>SHA-256 + Ed25519 seal and verify (also of exported files); md, Typst source and (with the Typst CLI) PDF output.</li>
+<li>Deadlines with the craft-biz month-end rule; <code>contract.deadline</code> -&gt; taskcraft (verified end to end); <code>contract.executed</code> -&gt; gaincraft.</li>
+<li>17 MCP tools (TOOLS.md, generated and test-checked).</li>
+</ul>
+<h2 class="section-title">Boundaries</h2>
+<ul>
+<li>No legal advice; the scan only points at clauses.</li>
+<li>No QES / ID Austria / A-Trust; the seal is tamper evidence, parties still sign.</li>
+<li>No fake output: PDF only through a real renderer.</li>
+<li>Wrap renderers (Typst, later WordCraft/PdfCraft), do not reimplement them.</li>
+</ul>
+<h2 class="section-title">Gaps (honest)</h2>
+<ul>
+<li>No egui window.</li>
+<li>Typst not installed on Goliath yet, so PDF is untested end to end.</li>
+<li>md -&gt; Typst converter knows headings, bullets and paragraphs only.</li>
+<li>Seal key is a plain file (Credential Manager planned).</li>
+<li>No LLM review, no word-level redline, no DOCX import.</li>
+<li>Rules not reviewed by a lawyer; synthetic data only.</li>
+</ul>
+<h2 class="section-title">Next</h2>
+<p>1. Install Typst; add a PDF test that runs when the CLI is present.</p>
+<p>2. egui app: contract list, side-by-side redline with risk panel, deadline calendar.</p>
+<p>3. Lawyer review of the rule set; rules for Gew&#228;hrleistung waivers and payment terms.</p>
+
+  <div class="page-break"></div><h2 class="section-title">Complete MCP Tool &amp; CLI Verb Reference</h2><p>Generated by <code>contractcraft tools --markdown</code>. Do not edit by hand: a test fails when this file</p>
+<p>is out of date. Every tool is also a CLI verb (<code>contractcraft --help</code>). Dotted names (<code>app.verb</code>) are accepted.</p>
+<table class="data-table"><thead><tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Required</th>
+<th>Optional</th>
+</tr></thead><tbody>
+<tr>
+<td><code>contract_status</code></td>
+<td>Counts by status, templates, sealed contracts, whether the seal key exists.</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>contract_template_add</code></td>
+<td>Add a template (or a new version of it). Placeholders {{name}} must match the declared variables exactly.</td>
+<td><code>name</code></td>
+<td><code>body</code>, <code>body_path</code>, <code>description</code>, <code>variables</code></td>
+</tr>
+<tr>
+<td><code>contract_template_list</code></td>
+<td>Templates (latest versions) with their variables.</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>contract_template_show</code></td>
+<td>One template with body and variables.</td>
+<td><code>name</code></td>
+<td><code>version</code></td>
+</tr>
+<tr>
+<td><code>contract_draft</code></td>
+<td>Create a draft from a template (values fill its variables; typos and missing required values are errors) or from your own text. Returns a quick risk count.</td>
+<td><code>title</code>, <code>counterparty</code></td>
+<td><code>body</code>, <code>body_path</code>, <code>template</code>, <code>values</code></td>
+</tr>
+<tr>
+<td><code>contract_list</code></td>
+<td>Contracts with status, allowed next statuses and the next deadline.</td>
+<td>-</td>
+<td><code>status</code>, <code>text</code></td>
+</tr>
+<tr>
+<td><code>contract_show</code></td>
+<td>One contract: text (current or a version), versions, status history, seals, risk findings, next deadline.</td>
+<td><code>contract</code></td>
+<td><code>as_of</code>, <code>version</code></td>
+</tr>
+<tr>
+<td><code>contract_edit</code></td>
+<td>New text version (draft only). Returns the redline stats and risk delta.</td>
+<td><code>contract</code></td>
+<td><code>body</code>, <code>body_path</code>, <code>note</code></td>
+</tr>
+<tr>
+<td><code>contract_terms</code></td>
+<td>Term data for deadlines: start, initial_months, renewal_months (0 = fixed term), notice_months, annual_value. Fixed after execution.</td>
+<td><code>contract</code></td>
+<td><code>annual_value</code>, <code>initial_months</code>, <code>notice_months</code>, <code>renewal_months</code>, <code>start</code></td>
+</tr>
+<tr>
+<td><code>contract_transition</code></td>
+<td>Move along draft -&gt; under_review -&gt; pending_signature -&gt; executed -&gt; terminated/expired (cancelled from any open state). Executing needs a seal of the current version and sends contract.executed to gaincraft.</td>
+<td><code>contract</code>, <code>to</code></td>
+<td><code>note</code></td>
+</tr>
+<tr>
+<td><code>contract_seal</code></td>
+<td>Seal the current version: SHA-256 of the text + Ed25519 signature. Tamper evidence, not a legal e-signature.</td>
+<td><code>contract</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>contract_verify</code></td>
+<td>Check all seals against the stored text; with path, check that a file is byte-identical to the sealed text.</td>
+<td><code>contract</code></td>
+<td><code>path</code></td>
+</tr>
+<tr>
+<td><code>contract_redline</code></td>
+<td>Line diff between two versions (default: previous vs current) plus which risk findings were added or removed.</td>
+<td><code>contract</code></td>
+<td><code>from</code>, <code>to</code></td>
+</tr>
+<tr>
+<td><code>contract_risk_scan</code></td>
+<td>Deterministic DE/EN clause scan (liability, indemnity, auto-renewal, foreign venue/law, missing DPA, penalties, unilateral changes, exclusivity). Optional TOML rule file. Not legal advice.</td>
+<td>-</td>
+<td><code>contract</code>, <code>rules_path</code>, <code>text</code>, <code>version</code></td>
+</tr>
+<tr>
+<td><code>contract_render</code></td>
+<td>Write the text as md (byte-identical to the sealed text), typ (Typst source) or pdf (needs the Typst CLI; fails clearly without it).</td>
+<td><code>contract</code>, <code>path</code></td>
+<td><code>format</code>, <code>version</code></td>
+</tr>
+<tr>
+<td><code>contract_deadlines</code></td>
+<td>Notice deadlines and term ends of executed contracts within N days (default 90). emit=true sends each once to taskcraft as contract.deadline.</td>
+<td>-</td>
+<td><code>as_of</code>, <code>emit</code>, <code>within_days</code></td>
+</tr>
+<tr>
+<td><code>contract_demo_seed</code></td>
+<td>Fill an EMPTY database with labelled demo templates and three contracts (executed, risky draft, renegotiated).</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+
+</body>
+</html>
