@@ -1,10 +1,10 @@
 //! `contractcraft-app`: Native eframe/egui desktop workstation for ContractCraft.
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic)]
 
-use craft_biz::bus::Bus;
-use craft_biz::confine::Confinement;
 use contractcraft_core::{dispatch, Command, Ctx};
 use contractcraft_store::{Contract, Contracts, Seal, Status, Version};
+use craft_biz::bus::Bus;
+use craft_biz::confine::Confinement;
 use eframe::egui::{self, Color32, RichText};
 use std::path::PathBuf;
 
@@ -216,14 +216,12 @@ impl eframe::App for App {
                                 }
                             };
 
-                            let is_sealed = self.ctx.db.seals(c).map(|s| !s.is_empty()).unwrap_or(false);
+                            let is_sealed =
+                                self.ctx.db.seals(c).map(|s| !s.is_empty()).unwrap_or(false);
 
                             ui.group(|ui| {
                                 if ui
-                                    .selectable_label(
-                                        is_sel,
-                                        format!("{}: {}", c.number, c.title),
-                                    )
+                                    .selectable_label(is_sel, format!("{}: {}", c.number, c.title))
                                     .clicked()
                                 {
                                     to_select = Some(c.clone());
@@ -254,9 +252,7 @@ impl eframe::App for App {
             ui.vertical(|ui| {
                 if let Some(ref c) = self.selected_contract {
                     ui.horizontal(|ui| {
-                        ui.heading(
-                            RichText::new(format!("{}: {}", c.number, c.title)).size(18.0),
-                        );
+                        ui.heading(RichText::new(format!("{}: {}", c.number, c.title)).size(18.0));
                         ui.separator();
                         ui.label(format!("Counterparty: {}", c.counterparty));
                         ui.label(format!("Version: v{}", c.current_version));
@@ -289,7 +285,10 @@ impl eframe::App for App {
                         ui.horizontal(|ui| {
                             ui.colored_label(
                                 Color32::from_rgb(46, 204, 113),
-                                format!("✅ Cryptographically Sealed ({} seal(s))", self.selected_seals.len()),
+                                format!(
+                                    "✅ Cryptographically Sealed ({} seal(s))",
+                                    self.selected_seals.len()
+                                ),
                             );
                             if let Some(last) = self.selected_seals.last() {
                                 ui.label(format!("Hash: {}", &last.sha256[..16]));
@@ -325,7 +324,10 @@ impl eframe::App for App {
             ui.label(format!(
                 "Contracts: {} | Selected: {}",
                 self.contracts.len(),
-                self.selected_contract.as_ref().map(|c| c.number.as_str()).unwrap_or("-")
+                self.selected_contract
+                    .as_ref()
+                    .map(|c| c.number.as_str())
+                    .unwrap_or("-")
             ));
             ui.separator();
             ui.label(&self.status_msg);
@@ -372,7 +374,10 @@ fn main() -> eframe::Result<()> {
     let db = match Contracts::open(&db_path) {
         Ok(c) => c,
         Err(e) => {
-            eprintln!("Failed to open contracts database at {}: {e}", db_path.display());
+            eprintln!(
+                "Failed to open contracts database at {}: {e}",
+                db_path.display()
+            );
             std::process::exit(1);
         }
     };
