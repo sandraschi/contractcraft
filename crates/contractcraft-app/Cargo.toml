@@ -1,5 +1,6 @@
 [package]
 name = "contractcraft-app"
+description = "contractcraft L3: contract lifecycle window (pipeline board, contract page with risks, redline, seals, terms) on the craft-biz-ui suite frame."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -15,8 +16,12 @@ craft-biz-ui = { workspace = true }
 contractcraft-core = { path = "../contractcraft-core" }
 contractcraft-store = { path = "../contractcraft-store" }
 chrono = { workspace = true }
-clap = { workspace = true }
-eframe = { workspace = true }
 egui = { workspace = true }
-serde = { workspace = true }
 serde_json = { workspace = true }
+similar = "2"
+
+[dev-dependencies]
+egui_kittest = "0.37"
+
+[lints]
+workspace = true

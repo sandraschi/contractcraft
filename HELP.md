@@ -4,6 +4,21 @@ Task-oriented guide. Every command also exists as an MCP tool ([docs/TOOLS.md](d
 
 The risk scan points a human reviewer at clauses. It is **not legal advice**. The seal is tamper evidence, **not** a legally binding electronic signature.
 
+## In the window
+
+Start `contractcraft-app` (`--demo` loads demo data into an empty database).
+
+- **Move a contract:** drag its card on the Pipeline. A refused drop shows why ("Seal version 2 first", "Draft -> Executed is not an allowed step"). Or open the contract and use the arrow buttons next to the status stepper; disabled buttons explain themselves on hover.
+- **Open a contract:** double-click a card, click a row in All contracts or Deadlines.
+- **Edit text:** contract page > Text > Edit text (draft only) > Save as new version, with a note.
+- **Compare versions:** Versions tab, pick two versions; removed lines are red and struck through, added lines green. "Redline report" adds the risk delta.
+- **Seal and verify:** side panel > Seal vN, Verify seals, Verify a file (checks an exported copy).
+- **Terms:** side panel > Edit terms (before execution). The next deadline appears in the side panel and the Deadlines tab.
+- **Deadlines to taskcraft:** Deadlines > Send to taskcraft (90 days). Each deadline is sent once.
+- **New contract from a template:** Templates > Use template; the form is prefilled with the template's variables.
+- **Check a contract you received:** Risk check, paste the text, Check.
+- **Anything else:** Ctrl+K opens the command palette with every tool. Ctrl+mouse wheel zooms, Ctrl+0 resets.
+
 ## Templates
 
 Write the text with `{{placeholders}}`, then register it with its variables: `name!` is required, `name=Wien` has a default, `name` is optional.

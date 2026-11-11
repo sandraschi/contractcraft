@@ -16,7 +16,7 @@ Contract templates, a review workflow, redlines, a deterministic clause risk sca
 3. Prove later that a copy is exactly what was agreed.
 4. Never miss a Kündigungsfrist.
 
-## Today (v0.1.0)
+## Today (v0.2.0)
 
 - Versioned templates with strict variables; drafts from templates or own text.
 - Enforced status machine; text changes only in draft as new versions; versions and seals immutable by trigger; executing needs a seal.
@@ -24,6 +24,7 @@ Contract templates, a review workflow, redlines, a deterministic clause risk sca
 - SHA-256 + Ed25519 seal and verify (also of exported files); md, Typst source and (with the Typst CLI) PDF output.
 - Deadlines with the craft-biz month-end rule; `contract.deadline` -> taskcraft (verified end to end); `contract.executed` -> gaincraft.
 - 17 MCP tools ([TOOLS.md](TOOLS.md), generated and test-checked).
+- Desktop window `contractcraft-app` on the craft-biz-ui suite frame: pipeline kanban (only allowed transitions, execute refused until sealed), contract table, contract page (risk-highlighted text, versions with inline redline, seals, terms, history), deadlines with send-to-taskcraft, templates, paste-in risk check. Every tool reachable (coverage test); 5 window tests incl. a real drag on the board.
 
 ## Boundaries
 
@@ -34,7 +35,8 @@ Contract templates, a review workflow, redlines, a deterministic clause risk sca
 
 ## Gaps (honest)
 
-- No egui window.
+- No classic menu bar in the window (see below).
+- Redline is line level; no side-by-side view yet, inline only.
 - Typst not installed on Goliath yet, so PDF is untested end to end.
 - md -> Typst converter knows headings, bullets and paragraphs only.
 - Seal key is a plain file (Credential Manager planned).
@@ -44,10 +46,12 @@ Contract templates, a review workflow, redlines, a deterministic clause risk sca
 ## Next
 
 1. Install Typst; add a PDF test that runs when the CLI is present.
-2. egui app: contract list, side-by-side redline with risk panel, deadline calendar.
+2. Window: side-by-side redline, deadline calendar view, menu bar per the fleet standard.
 3. Lawyer review of the rule set; rules for Gewährleistung waivers and payment terms.
 
 ## UI/UX Architecture & Menu Bar Standard
+
+**Status: target, not implemented.** v0.2.0 uses the shared craft-biz-ui suite frame (top bar, left navigation, Ctrl+K palette, status bar, signals dock) and has no menu bar. The menu bar below is the target once the kit grows one for all back-office apps.
 
 In accordance with [`CRAFT_MENU_BAR_STANDARD.md`](../../mcp-central-docs/standards/rust-artcraft/CRAFT_MENU_BAR_STANDARD.md):
 - **Pattern 2 (Viewport-Centric Craft Workstation):** Persistent contract document editor / redline comparison canvas with clause risk inspector. Top quick button row acts as accelerators into the `View` menu. To add a new contract view or risk analysis panel:

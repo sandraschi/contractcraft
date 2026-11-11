@@ -9,7 +9,7 @@ Contract templates, workflow, redlines, risk scan, seals and deadlines. Read fir
 - `crates/contractcraft-store` (L1): templates (versioned), contracts, immutable versions and seals, transitions, emitted-event log on SQLite WAL. Status machine and template fill live here.
 - `crates/contractcraft-core` (L1): `Command` bus, `dispatch`, MCP catalog, `risk.rs` (TOML rules, default DE/EN set), `seal.rs` (SHA-256 + Ed25519), `render.rs` (md -> Typst, Typst CLI wrapper), redline (`similar`), deadlines, demo seed.
 - `crates/contractcraft-mcp` (L2): `contractcraft` binary. CLI verbs map onto the same tool calls as MCP.
-- No L3 (egui) yet. Planned: contract list, side-by-side redline, risk panel, deadline calendar.
+- `crates/contractcraft-app` (L3): egui window on `craft_biz_ui::app::Shell`. Changes only through `Frame::run/run_confirm/form` (dispatch); reads from the store, `risk::scan`, `next_deadline`. `COVERAGE` lists where each tool lives; a test fails when a tool has no place. Board drop rules mirror `Status::can_move_to` plus the seal requirement.
 - Shared kernel: `../craft-biz` (deadline maths, money, bus, MCP loop, confinement).
 
 ## Invariants (never weaken)
@@ -30,6 +30,7 @@ Contract templates, workflow, redlines, risk scan, seals and deadlines. Read fir
 - `docs/PRD.md`: purpose, boundaries, honest gaps, next steps; update "Today" and "Gaps" with every release.
 - `docs/TOOLS.md`: generated. After any tool change run `just docs`; the `tools_doc_is_current` test fails otherwise.
 - `CHANGELOG.md`: one entry per change set.
+- Window: README "Desktop window", HELP "In the window", `COVERAGE` in the app crate.
 - CLI help: `about`, argument doc comments and `AFTER_HELP` in the mcp crate's `main.rs`.
 
 ## Rules

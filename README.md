@@ -2,7 +2,7 @@
 
 Contract templates, review workflow, redlines, a clause risk scan, tamper-evident seals and notice deadlines for a small Austrian business. One SQLite file, one binary that is both CLI and MCP server. Part of the back-office craft suite (replaces Word templates in a folder, ad-hoc review mails and the "when can we cancel this?" spreadsheet).
 
-Status: **v0.1.1, Tier 1** (store + CLI + MCP, tested). No desktop window yet. Synthetic demo data only. **Not legal advice**: the risk scan points a human reviewer at clauses, nothing more.
+Status: **v0.2.0** (store + CLI + MCP + desktop window, tested). Synthetic demo data only. **Not legal advice**: the risk scan points a human reviewer at clauses, nothing more.
 
 - How to use it day to day: [HELP.md](HELP.md)
 - What it is for and where it stops: [docs/PRD.md](docs/PRD.md)
@@ -41,6 +41,24 @@ Template variables on the CLI: `--var kunde!` (required), `--var ort=Wien` (defa
 
 Database: `--db PATH`, else `$CONTRACTCRAFT_DB`, else `%LOCALAPPDATA%\contractcraft\contractcraft.db`. Seal key: `--key`, else `seal.key` next to the database (created on first seal; keep it out of shared backups). Typst: `typst` on PATH or `CONTRACTCRAFT_TYPST`.
 
+## Desktop window
+
+`contractcraft-app` is the window, laid out like a contract lifecycle tool. Every action goes through the same dispatch as CLI and MCP; all 17 tools have a place in it (checked by a test).
+
+- **Pipeline:** kanban by status (draft, under review, pending signature, executed, ended) with KPI tiles for active annual value, open work, high risks and deadlines inside 60 days. Dragging a card changes the status; only allowed steps are accepted, and executing is refused with "seal version N first" until the current version is sealed. Executing, terminating and cancelling ask for confirmation.
+- **All contracts:** sortable, filterable table with status, annual value, risk count and next deadline.
+- **Contract page:** status stepper with the allowed next steps; tabs for the text (numbered paragraphs, risky paragraphs highlighted with rule and advice, editing in draft saves a new version), versions with an inline redline, risks, seals (seal, verify, verify an exported file), deadlines and the transition history. Side panel: counterparty, terms (edit before execution), export to md / Typst / PDF.
+- **Deadlines:** next notice date or expiry per contract; "Send to taskcraft" emits `contract.deadline` events.
+- **Templates:** variables with required markers, "Use template" opens a prefilled draft form.
+- **Risk check:** paste a contract you received and scan it; nothing is stored.
+- Ctrl+K command palette for any tool, signals dock (outgoing events, retry), Ctrl+mouse wheel zoom, high-contrast light and dark themes, DE/EN.
+
+```powershell
+contractcraft-app                      # default database
+contractcraft-app --demo --view 0     # demo data, pipeline
+contractcraft-app --select C-2026-003 --view 1
+```
+
 ## MCP
 
 ```json
@@ -60,7 +78,7 @@ Needs `../craft-biz` checked out next to this repo.
 
 ## Not done (honest list)
 
-- No egui desktop app.
+- The window has no classic menu bar (File / Edit / View ...); actions live in the top bar, side panel and the Ctrl+K palette.
 - PDF only through the Typst CLI (not installed on Goliath yet). The md -> Typst converter knows headings, bullets and paragraphs; no tables or bold.
 - No LLM review (planned via craft-ai-core, always labelled advisory).
 - Seal key is a plain file, not Windows Credential Manager yet.
