@@ -9,3 +9,4 @@
 *.key
 *.pdf
 *.typ
+/dist
