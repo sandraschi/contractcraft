@@ -1,0 +1,101 @@
+{
+  "manifest_version": "0.2",
+  "name": "contractcraft",
+  "display_name": "ContractCraft",
+  "version": "__VERSION__",
+  "description": "contractcraft L3: contract lifecycle window (pipeline board, contract page with risks, redline, seals, terms) on the craft-biz-ui suite frame.",
+  "author": {
+    "name": "Sandra Schipal",
+    "url": "https://github.com/sandraschi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sandraschi/contractcraft"
+  },
+  "license": "MIT OR Apache-2.0",
+  "server": {
+    "type": "binary",
+    "entry_point": "contractcraft.exe",
+    "mcp_config": {
+      "command": "${__dirname}/contractcraft.exe",
+      "args": [
+        "mcp"
+      ]
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "win32"
+    ]
+  },
+  "tools": [
+    {
+      "name": "contract_status",
+      "description": "Counts by status, templates, sealed contracts, whether the seal key exists."
+    },
+    {
+      "name": "contract_template_add",
+      "description": "Add a template (or a new version of it). Placeholders {{name}} must match the declared variables exactly."
+    },
+    {
+      "name": "contract_template_list",
+      "description": "Templates (latest versions) with their variables."
+    },
+    {
+      "name": "contract_template_show",
+      "description": "One template with body and variables."
+    },
+    {
+      "name": "contract_draft",
+      "description": "Create a draft from a template (values fill its variables; typos and missing required values are errors) or from your own text. Returns a quick risk count."
+    },
+    {
+      "name": "contract_list",
+      "description": "Contracts with status, allowed next statuses and the next deadline."
+    },
+    {
+      "name": "contract_show",
+      "description": "One contract: text (current or a version), versions, status history, seals, risk findings, next deadline."
+    },
+    {
+      "name": "contract_edit",
+      "description": "New text version (draft only). Returns the redline stats and risk delta."
+    },
+    {
+      "name": "contract_terms",
+      "description": "Term data for deadlines: start, initial_months, renewal_months (0 = fixed term), notice_months, annual_value. Fixed after execution."
+    },
+    {
+      "name": "contract_transition",
+      "description": "Move along draft -> under_review -> pending_signature -> executed -> terminated/expired (cancelled from any open state). Executing needs a seal of the current version and sends contract.executed to gaincraft."
+    },
+    {
+      "name": "contract_seal",
+      "description": "Seal the current version: SHA-256 of the text + Ed25519 signature. Tamper evidence, not a legal e-signature."
+    },
+    {
+      "name": "contract_verify",
+      "description": "Check all seals against the stored text; with path, check that a file is byte-identical to the sealed text."
+    },
+    {
+      "name": "contract_redline",
+      "description": "Line diff between two versions (default: previous vs current) plus which risk findings were added or removed."
+    },
+    {
+      "name": "contract_risk_scan",
+      "description": "Deterministic DE/EN clause scan (liability, indemnity, auto-renewal, foreign venue/law, missing DPA, penalties, unilateral changes, exclusivity). Optional TOML rule file. Not legal advice."
+    },
+    {
+      "name": "contract_render",
+      "description": "Write the text as md (byte-identical to the sealed text), typ (Typst source) or pdf (needs the Typst CLI; fails clearly without it)."
+    },
+    {
+      "name": "contract_deadlines",
+      "description": "Notice deadlines and term ends of executed contracts within N days (default 90). emit=true sends each once to taskcraft as contract.deadline."
+    },
+    {
+      "name": "contract_demo_seed",
+      "description": "Fill an EMPTY database with labelled demo templates and three contracts (executed, risky draft, renegotiated)."
+    }
+  ]
+}
