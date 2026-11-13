@@ -101,6 +101,7 @@ pub enum Command {
         emit: bool,
     },
     DemoSeed,
+    DrainInbox,
 }
 
 #[derive(Debug, Clone)]
@@ -284,6 +285,7 @@ impl Command {
                 emit: flag(a, "emit"),
             },
             "contract_demo_seed" => Command::DemoSeed,
+            "contract_drain_inbox" => Command::DrainInbox,
             other => return Err(format!("unknown tool {other}")),
         })
     }
@@ -445,6 +447,7 @@ pub fn dispatch(ctx: &mut Ctx, cmd: Command) -> Result<Value, String> {
             emit,
         } => deadlines(ctx, within_days, as_of.unwrap_or_else(today), emit),
         Command::DemoSeed => demo_seed(ctx),
+        Command::DrainInbox => drain_inbox(ctx),
     }
 }
 
@@ -1003,6 +1006,125 @@ pub fn demo_seed(ctx: &mut Ctx) -> Result<Value, String> {
     Ok(json!({ "demo": true, "stats": to_json(&ctx.db.stats().map_err(e)?)? }))
 }
 
+/// Opens a draft employment contract from each `candidate.hired` event.
+///
+/// `candidate_id` and `name` are required. A missing salary stays out of the
+/// terms. A second event for the same candidate is acknowledged and does not
+/// open another draft.
+pub fn drain_inbox(ctx: &mut Ctx) -> Result<Value, String> {
+    let events = ctx.bus.pending(APP).map_err(|err| err.to_string())?;
+    let processed = events.len();
+    let mut created = Vec::new();
+    let mut rejected = 0usize;
+    for ev in events {
+        let outcome = if ev.kind == "candidate.hired" {
+            apply_hired(ctx, &ev.payload)
+        } else {
+            Ok(None)
+        };
+        match outcome {
+            Ok(Some(number)) => {
+                created.push(number);
+                ctx.bus.ack(APP, &ev.id).map_err(|err| err.to_string())?;
+            }
+            Ok(None) => ctx.bus.ack(APP, &ev.id).map_err(|err| err.to_string())?,
+            Err(err) => {
+                rejected += 1;
+                ctx.bus
+                    .reject(APP, &ev.id, &err)
+                    .map_err(|bus_err| bus_err.to_string())?;
+            }
+        }
+    }
+    Ok(json!({
+        "processed": processed,
+        "created": created,
+        "rejected": rejected,
+    }))
+}
+
+fn apply_hired(ctx: &mut Ctx, payload: &Value) -> Result<Option<String>, String> {
+    let candidate_id = required_text(payload, "candidate_id")?;
+    let name = required_text(payload, "name")?;
+    let marker = format!("hire:{candidate_id}");
+    if !ctx.db.contracts(None, Some(&marker)).map_err(e)?.is_empty() {
+        return Ok(None);
+    }
+    let email = optional_text(payload, "email");
+    let salary_eur = match payload.get("salary_eur") {
+        None | Some(Value::Null) => None,
+        Some(value) => {
+            let salary = value
+                .as_i64()
+                .ok_or_else(|| "salary_eur must be a whole number of euros".to_string())?;
+            if salary < 0 {
+                return Err("salary_eur cannot be negative".into());
+            }
+            Some(salary)
+        }
+    };
+    let mut body = format!("Draft employment contract for {name}.\nCandidate {marker}.\n");
+    if let Some(email) = email {
+        body.push_str(&format!("Email {email}.\n"));
+    }
+    if let Some(salary) = salary_eur {
+        body.push_str(&format!(
+            "Offered salary {salary} EUR per year, as stated by hirecraft.\n"
+        ));
+    }
+    if let Some(hours) = payload.get("azg_weekly_cap").and_then(Value::as_f64) {
+        body.push_str(&format!(
+            "Weekly cap {hours} hours, as stated by hirecraft.\n"
+        ));
+    }
+    if let Some(days) = payload.get("annual_leave_days").and_then(Value::as_i64) {
+        body.push_str(&format!(
+            "Annual leave {days} days, as stated by hirecraft.\n"
+        ));
+    }
+    body.push_str("This draft is not executed and it is not a qualified signature.\n");
+    let contract = ctx
+        .db
+        .create(
+            &NewContract {
+                title: format!("Employment {name} ({marker})"),
+                counterparty: name.to_string(),
+                template: None,
+                values: BTreeMap::new(),
+                body,
+            },
+            &ctx.actor,
+            today(),
+        )
+        .map_err(e)?;
+    if let Some(salary) = salary_eur {
+        let cents = salary
+            .checked_mul(100)
+            .ok_or_else(|| "salary_eur is too large".to_string())?;
+        let mut terms = Terms::default();
+        terms.annual_value_cents = Some(cents);
+        ctx.db.set_terms(&contract.number, &terms).map_err(e)?;
+    }
+    Ok(Some(contract.number))
+}
+
+fn required_text<'a>(payload: &'a Value, key: &str) -> Result<&'a str, String> {
+    payload
+        .get(key)
+        .and_then(Value::as_str)
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .ok_or_else(|| format!("{key} is required"))
+}
+
+fn optional_text<'a>(payload: &'a Value, key: &str) -> Option<&'a str> {
+    payload
+        .get(key)
+        .and_then(Value::as_str)
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+}
+
 /// MCP tool catalog.
 pub fn tools() -> Vec<Value> {
     let c = json!({ "type": "string", "description": "Contract number like C-2026-001 (or id)" });
@@ -1025,6 +1147,7 @@ pub fn tools() -> Vec<Value> {
         tool("contract_risk_scan", "Deterministic DE/EN clause scan (liability, indemnity, auto-renewal, foreign venue/law, missing DPA, penalties, unilateral changes, exclusivity). Optional TOML rule file. Not legal advice.", json!({ "contract": c, "text": {"type":"string"}, "version": {"type":"integer"}, "rules_path": {"type":"string"} }), &[]),
         tool("contract_render", "Write the text as md (byte-identical to the sealed text), typ (Typst source) or pdf (needs the Typst CLI; fails clearly without it).", json!({ "contract": c, "format": {"type":"string","enum":["md","typ","pdf"]}, "path": {"type":"string"}, "version": {"type":"integer"} }), &["contract", "path"]),
         tool("contract_deadlines", "Notice deadlines and term ends of executed contracts within N days (default 90). emit=true sends each once to taskcraft as contract.deadline.", json!({ "within_days": {"type":"integer"}, "as_of": date, "emit": {"type":"boolean"} }), &[]),
+        tool("contract_drain_inbox", "Open one draft employment contract per hirecraft candidate.hired event. A repeated candidate is skipped. A payload without candidate_id or name is rejected.", json!({}), &[]),
         tool("contract_demo_seed", "Fill an EMPTY database with labelled demo templates and three contracts (executed, risky draft, renegotiated).", json!({}), &[]),
     ]
 }

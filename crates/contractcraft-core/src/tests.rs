@@ -36,7 +36,7 @@ fn d(y: i32, m: u32, day: u32) -> NaiveDate {
 
 #[test]
 fn catalog_tools_are_routable() {
-    assert_eq!(tools().len(), 17);
+    assert_eq!(tools().len(), 18);
     for t in tools() {
         let name = t["name"].as_str().unwrap();
         if let Err(err) = Command::from_tool(name, &json!({})) {
@@ -281,4 +281,54 @@ fn pdf_without_typst_fails_cleanly() {
         .is_err(),
         "confined"
     );
+}
+
+#[test]
+fn hired_event_opens_one_draft() {
+    let mut env = env("hired");
+    let c = &mut env.ctx;
+    let hired = json!({
+        "candidate_id": "C-1",
+        "name": "Ada",
+        "email": "ada@example.at",
+        "salary_eur": 70000,
+        "azg_weekly_cap": 38.5,
+        "annual_leave_days": 25
+    });
+    c.bus
+        .emit(
+            "hirecraft",
+            "contractcraft",
+            "candidate.hired",
+            hired.clone(),
+        )
+        .unwrap();
+    c.bus
+        .emit("hirecraft", "contractcraft", "candidate.hired", hired)
+        .unwrap();
+    c.bus
+        .emit(
+            "hirecraft",
+            "contractcraft",
+            "candidate.hired",
+            json!({ "candidate_id": "C-2" }),
+        )
+        .unwrap();
+    let result = call(c, "contract_drain_inbox", json!({})).unwrap();
+    assert_eq!(result["processed"], 3);
+    assert_eq!(result["rejected"], 1);
+    let created = result["created"].as_array().unwrap();
+    assert_eq!(created.len(), 1);
+    let number = created[0].as_str().unwrap();
+    let contract = c.db.contract(number).unwrap();
+    assert_eq!(contract.status, Status::Draft);
+    assert_eq!(contract.counterparty, "Ada");
+    assert!(contract.title.contains("hire:C-1"));
+    assert_eq!(contract.terms.annual_value_cents, Some(7_000_000));
+    assert!(c.bus.pending("contractcraft").unwrap().is_empty());
+    let failed = c
+        .bus
+        .history("contractcraft", craft_biz::bus::EventState::Failed, 10)
+        .unwrap();
+    assert_eq!(failed.len(), 1);
 }

@@ -148,6 +148,8 @@ enum Cmd {
         #[arg(long)]
         emit: bool,
     },
+    /// Open draft contracts from hirecraft candidate.hired events.
+    DrainInbox,
     /// Fill an empty database with labelled demo data.
     DemoSeed,
     /// Print the MCP tool catalog (JSON, or markdown for docs/TOOLS.md).
@@ -384,6 +386,7 @@ fn to_tool(cmd: Cmd) -> Result<(&'static str, Value), String> {
             "contract_deadlines",
             json!({ "within_days": days, "emit": emit }),
         ),
+        Cmd::DrainInbox => ("contract_drain_inbox", json!({})),
         Cmd::DemoSeed => ("contract_demo_seed", json!({})),
         Cmd::Tools { .. } | Cmd::Mcp => return Err("not a tool verb".into()),
     })

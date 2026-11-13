@@ -21,4 +21,5 @@ is out of date. Every tool is also a CLI verb (`contractcraft --help`). Dotted n
 | `contract_risk_scan` | Deterministic DE/EN clause scan (liability, indemnity, auto-renewal, foreign venue/law, missing DPA, penalties, unilateral changes, exclusivity). Optional TOML rule file. Not legal advice. | - | `contract`, `rules_path`, `text`, `version` |
 | `contract_render` | Write the text as md (byte-identical to the sealed text), typ (Typst source) or pdf (needs the Typst CLI; fails clearly without it). | `contract`, `path` | `format`, `version` |
 | `contract_deadlines` | Notice deadlines and term ends of executed contracts within N days (default 90). emit=true sends each once to taskcraft as contract.deadline. | - | `as_of`, `emit`, `within_days` |
+| `contract_drain_inbox` | Open one draft employment contract per hirecraft candidate.hired event. A repeated candidate is skipped. A payload without candidate_id or name is rejected. | - | - |
 | `contract_demo_seed` | Fill an EMPTY database with labelled demo templates and three contracts (executed, risky draft, renegotiated). | - | - |

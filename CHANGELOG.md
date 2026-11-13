@@ -2,6 +2,7 @@
 
 ## 0.2.0 - 2026-11-11
 
+- A `candidate.hired` event from hirecraft opens one contract draft.
 - Desktop window rebuilt on the craft-biz-ui suite frame: pipeline kanban (allowed transitions only, executing refused until the current version is sealed, confirmation for executing, terminating and cancelling), contract table, contract page (status stepper, risk-highlighted numbered text, editing in draft as a new version, versions with inline redline, risks, seals with verify, deadlines, history, terms and export side panel), deadlines view with send-to-taskcraft, templates with prefilled drafts, paste-in risk check, settings.
 - All 17 tools reachable from the window (coverage test); 5 window tests including a real drag that is refused and an allowed one that moves.
 - High-contrast light and dark themes, Ctrl+mouse wheel zoom, DE/EN, `--screenshot`, `--select`, `--smoke`.

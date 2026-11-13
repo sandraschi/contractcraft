@@ -23,7 +23,8 @@ Contract templates, a review workflow, redlines, a deterministic clause risk sca
 - Risk scan: 9 default DE/EN rules, user TOML rules, disclaimer on every result; redline with risk delta.
 - SHA-256 + Ed25519 seal and verify (also of exported files); md, Typst source and (with the Typst CLI) PDF output.
 - Deadlines with the craft-biz month-end rule; `contract.deadline` -> taskcraft (verified end to end); `contract.executed` -> gaincraft.
-- 17 MCP tools ([TOOLS.md](TOOLS.md), generated and test-checked).
+- `contract_drain_inbox` opens one draft from each hirecraft `candidate.hired` event. TeamCraft opens one employee and does not copy the salary. AssetCraft records an equipment reminder and does not invent a purchase.
+- 18 MCP tools ([TOOLS.md](TOOLS.md), generated and test-checked).
 - Desktop window `contractcraft-app` on the craft-biz-ui suite frame: pipeline kanban (only allowed transitions, execute refused until sealed), contract table, contract page (risk-highlighted text, versions with inline redline, seals, terms, history), deadlines with send-to-taskcraft, templates, paste-in risk check. Every tool reachable (coverage test); 5 window tests incl. a real drag on the board.
 
 ## Boundaries
