@@ -69,6 +69,7 @@ pub const COVERAGE: &[(&str, &str)] = &[
     ),
     ("contract_render", "Contract page > Export (md, typ, pdf)"),
     ("contract_deadlines", "Deadlines view; Send to taskcraft"),
+    ("contract_drain_inbox", "Settings > Take new hires"),
     ("contract_demo_seed", "Empty state; Settings > Demo data"),
 ];
 
@@ -1228,6 +1229,16 @@ impl ContractApp {
             ui.horizontal(|ui| {
                 if ui.button("Status").clicked() {
                     f.run_show("contract_status", json!({}));
+                }
+                if ui
+                    .button(f.t("Neueinstellung als Entwurf", "Take new hires"))
+                    .clicked()
+                {
+                    f.run(
+                        f.t("Neueinstellung", "New hire"),
+                        "contract_drain_inbox",
+                        json!({}),
+                    );
                 }
                 if ui
                     .add_enabled(

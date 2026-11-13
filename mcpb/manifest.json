@@ -94,6 +94,10 @@
       "description": "Notice deadlines and term ends of executed contracts within N days (default 90). emit=true sends each once to taskcraft as contract.deadline."
     },
     {
+      "name": "contract_drain_inbox",
+      "description": "Open one draft employment contract per hirecraft candidate.hired event. A repeated candidate is skipped."
+    },
+    {
       "name": "contract_demo_seed",
       "description": "Fill an EMPTY database with labelled demo templates and three contracts (executed, risky draft, renegotiated)."
     }

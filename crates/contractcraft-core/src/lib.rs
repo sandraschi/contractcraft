@@ -1101,8 +1101,10 @@ fn apply_hired(ctx: &mut Ctx, payload: &Value) -> Result<Option<String>, String>
         let cents = salary
             .checked_mul(100)
             .ok_or_else(|| "salary_eur is too large".to_string())?;
-        let mut terms = Terms::default();
-        terms.annual_value_cents = Some(cents);
+        let terms = Terms {
+            annual_value_cents: Some(cents),
+            ..Terms::default()
+        };
         ctx.db.set_terms(&contract.number, &terms).map_err(e)?;
     }
     Ok(Some(contract.number))

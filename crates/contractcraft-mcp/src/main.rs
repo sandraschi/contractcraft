@@ -725,7 +725,7 @@ mod tests {
         assert_eq!(init["result"]["serverInfo"]["name"], "contractcraft");
         let list =
             handle_line(&mut h, r#"{"jsonrpc":"2.0","id":2,"method":"tools/list"}"#).unwrap();
-        assert_eq!(list["result"]["tools"].as_array().map(Vec::len), Some(17));
+        assert_eq!(list["result"]["tools"].as_array().map(Vec::len), Some(18));
         let seed = handle_line(&mut h, r#"{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"contract_demo_seed","arguments":{}}}"#).unwrap();
         assert_eq!(seed["result"]["isError"], false, "{seed}");
         let scan = handle_line(&mut h, r#"{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"contract.risk_scan","arguments":{"text":"Der Auftragnehmer haftet unbeschränkt."}}}"#).unwrap();
